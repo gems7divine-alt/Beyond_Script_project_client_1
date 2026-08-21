@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Mail, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import background from '../../assets/images/login-background.jpg'
@@ -7,6 +7,7 @@ import logo from '../../assets/images/logo.png'
 
 const OTP_LENGTH = 6
 const RESEND_SECONDS = 30
+const FIXED_OTP = '123456'
 
 const maskEmail = (value) => {
   const [name, domain] = value.split('@')
@@ -20,8 +21,12 @@ export default function ForgetPassword() {
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''))
   const [error, setError] = useState('')
-  const [verified, setVerified] = useState(false)
   const [resendTimer, setResendTimer] = useState(0)
+
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const otpRefs = useRef([])
 
@@ -99,9 +104,35 @@ export default function ForgetPassword() {
       return
     }
 
+    if (code !== FIXED_OTP) {
+      setError('Invalid OTP. Please try again')
+      return
+    }
+
     console.log({ email, otp: code })
 
-    setVerified(true)
+    setError('')
+    setNewPassword('')
+    setConfirmPassword('')
+    setStep('reset')
+  }
+
+  const handleResetSubmit = (e) => {
+    e.preventDefault()
+
+    if (newPassword.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    console.log({ email, password: newPassword })
+
+    setStep('done')
   }
 
   return (
@@ -142,19 +173,19 @@ export default function ForgetPassword() {
             />
           </Link>
 
-          {verified ? (
+          {step === 'done' ? (
             <>
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
                 <ShieldCheck size={32} className="text-gold" strokeWidth={1.8} />
               </div>
 
               <h1 className="mt-4 text-center font-serif text-[1.4rem] font-bold leading-tight text-navy sm:text-[1.5rem]">
-                Email verified
+                Password reset
               </h1>
 
               <p className="mt-2 text-center text-[15px] leading-relaxed text-navy/80">
-                Your identity has been confirmed successfully. You can now set
-                a new password for your account.
+                Your password has been reset successfully. You can now log in
+                with your new password.
               </p>
 
               <Link
@@ -289,7 +320,7 @@ export default function ForgetPassword() {
                 </Link>
               </p>
             </>
-          ) : (
+          ) : step === 'otp' ? (
             <>
               <h1 className="text-center font-serif text-[1.4rem] font-bold leading-tight text-navy sm:text-[1.5rem]">
                 Verify your email
@@ -411,6 +442,197 @@ export default function ForgetPassword() {
                     : 'Resend OTP'}
                 </button>
               </div>
+            </>
+          ) : (
+            <>
+              <h1 className="text-center font-serif text-[1.4rem] font-bold leading-tight text-navy sm:text-[1.5rem]">
+                Set a new password
+              </h1>
+
+              <p className="mt-2 text-center text-[15px] leading-relaxed text-navy/80">
+                Your email is verified. Create a strong new password for your
+                account
+              </p>
+
+              <form
+                onSubmit={handleResetSubmit}
+                className="mt-6 flex flex-col gap-4"
+              >
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="new-password"
+                    className="text-sm font-semibold text-navy"
+                  >
+                    New password
+                  </label>
+
+                  <div
+                    className="
+                      flex h-12 items-center gap-3
+                      rounded-md
+                      border border-gold/60
+                      bg-white
+                      px-4
+                      shadow-sm
+                      transition-colors
+                      focus-within:border-gold
+                      focus-within:ring-1
+                      focus-within:ring-gold/30
+                    "
+                  >
+                    <Lock
+                      size={20}
+                      className="shrink-0 text-gold"
+                      strokeWidth={1.8}
+                    />
+
+                    <input
+                      id="new-password"
+                      name="new-password"
+                      type={showNewPassword ? 'text' : 'password'}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                      autoComplete="new-password"
+                      required
+                      minLength={6}
+                      className="
+                        w-full
+                        bg-transparent
+                        text-navy
+                        outline-none
+                        placeholder:text-navy/40
+                      "
+                    />
+
+                    <button
+                      type="button"
+                      aria-label={
+                        showNewPassword ? 'Hide password' : 'Show password'
+                      }
+                      onClick={() => setShowNewPassword((prev) => !prev)}
+                      className="
+                        shrink-0
+                        rounded
+                        text-navy/50
+                        transition-colors
+                        hover:text-gold
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-gold/30
+                      "
+                    >
+                      {showNewPassword ? (
+                        <EyeOff size={20} strokeWidth={1.8} />
+                      ) : (
+                        <Eye size={20} strokeWidth={1.8} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="confirm-password"
+                    className="text-sm font-semibold text-navy"
+                  >
+                    Confirm new password
+                  </label>
+
+                  <div
+                    className="
+                      flex h-12 items-center gap-3
+                      rounded-md
+                      border border-gold/60
+                      bg-white
+                      px-4
+                      shadow-sm
+                      transition-colors
+                      focus-within:border-gold
+                      focus-within:ring-1
+                      focus-within:ring-gold/30
+                    "
+                  >
+                    <Lock
+                      size={20}
+                      className="shrink-0 text-gold"
+                      strokeWidth={1.8}
+                    />
+
+                    <input
+                      id="confirm-password"
+                      name="confirm-password"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Re-enter new password"
+                      autoComplete="new-password"
+                      required
+                      minLength={6}
+                      className="
+                        w-full
+                        bg-transparent
+                        text-navy
+                        outline-none
+                        placeholder:text-navy/40
+                      "
+                    />
+
+                    <button
+                      type="button"
+                      aria-label={
+                        showConfirmPassword ? 'Hide password' : 'Show password'
+                      }
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      className="
+                        shrink-0
+                        rounded
+                        text-navy/50
+                        transition-colors
+                        hover:text-gold
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-gold/30
+                      "
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff size={20} strokeWidth={1.8} />
+                      ) : (
+                        <Eye size={20} strokeWidth={1.8} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {error && (
+                  <p className="text-sm font-medium text-red-600">{error}</p>
+                )}
+
+                <button
+                  type="submit"
+                  className="
+                    mt-1
+                    h-12
+                    rounded-md
+                    bg-gold-gradient
+                    text-[17px]
+                    font-semibold
+                    text-white
+                    shadow-gold
+                    transition-all
+                    duration-200
+                    hover:-translate-y-0.5
+                    hover:shadow-lg
+                    active:translate-y-0
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-gold/40
+                    focus:ring-offset-2
+                  "
+                >
+                  Reset Password
+                </button>
+              </form>
             </>
           )}
         </div>
