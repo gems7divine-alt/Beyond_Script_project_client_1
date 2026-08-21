@@ -3,6 +3,7 @@ import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import LoginPage from './pages/loginpage/LoginPage.jsx'
 import RegisterPage from './pages/Registerpage/RegisterPage.jsx'
+import ForgetPassword from './pages/forgetpassword/ForgetPassword.jsx'
 
 export default function App() {
   return (
@@ -32,6 +33,15 @@ export default function App() {
             <>
               <Navbar variant="solid" />
               <RegisterPage />
+            </>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <>
+              <Navbar variant="solid" />
+              <ForgetPassword />
             </>
           }
         />
