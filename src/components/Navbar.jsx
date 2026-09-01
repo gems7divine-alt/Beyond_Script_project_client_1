@@ -6,12 +6,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 const navLinks = [
   { label: 'Home', to: '/' },
-  { label: 'Courses', to: '#' },
-  { label: 'Workbook', to: '#' },
+  { label: 'Courses', to: '/courses' },
+  { label: 'Workbook', to: '/workbooks' },
   { label: 'Appointment', to: '#' },
-  { label: 'About', to: '#' },
+  { label: 'About', to: '/about' },
   { label: 'Blog', to: '#' },
-  { label: 'Contact Us', to: '#' },
+  { label: 'Contact Us', to: '/contact' },
 ]
 
 export default function Navbar({ variant = 'overlay' }) {
