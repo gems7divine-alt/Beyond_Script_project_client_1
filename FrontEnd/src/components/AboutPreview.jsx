@@ -133,7 +133,7 @@ export default function AboutPreview() {
               <img
                 src={profileImg}
                 alt="Abiya Benodson"
-                className="h-full w-full object-cover"
+                className="aspect-[3/4] h-full w-full object-cover"
               />
             </div>
           </motion.div>
@@ -146,7 +146,7 @@ export default function AboutPreview() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <div className="grid gap-6 sm:grid-cols-3 sm:gap-4 lg:gap-8">
+          <div className="grid gap-6 md:grid-cols-3 md:gap-4 lg:gap-8">
             {pillars.map(({ title, description, Icon }, i) => (
               <motion.div
                 key={title}

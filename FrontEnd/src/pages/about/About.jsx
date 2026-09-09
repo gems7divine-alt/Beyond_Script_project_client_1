@@ -136,7 +136,7 @@ export default function About() {
               initial="hidden"
               animate="visible"
               custom={3}
-              className="mb-1 font-serif text-1xl font-bold text-navy"
+              className="mb-1 font-serif text-xl font-bold text-navy"
             >
               Meet Abiya Benodson
             </motion.h2>
@@ -245,7 +245,7 @@ export default function About() {
               <img
                 src={profileImg}
                 alt="Abiya Benodson"
-                className="h-full w-full object-cover"
+                className="aspect-[3/4] h-full w-full object-cover"
               />
             </div>
 
@@ -301,7 +301,7 @@ export default function About() {
                 {i < steps.length - 1 && (
                   <ArrowRight
                     size={24}
-                    className="absolute top-8 -right-6 hidden text-gold/40 md:block lg:-right-8"
+                    className="absolute top-8 -right-6 hidden text-gold/40 lg:block lg:-right-8"
                   />
                 )}
               </motion.div>
@@ -326,7 +326,7 @@ export default function About() {
             <span className="h-[2px] w-8 bg-gold" />
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-3 sm:gap-4 lg:gap-8">
+            <div className="grid gap-6 md:grid-cols-3 md:gap-4 lg:gap-8">
             {pillars.map(({ title, description, Icon }, i) => (
               <motion.div
                 key={title}

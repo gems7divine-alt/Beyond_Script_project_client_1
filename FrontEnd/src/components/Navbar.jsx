@@ -1,5 +1,5 @@
 import logo from '../assets/images/logo.png'
-import { ChevronDown, Menu, User, UserPlus, X } from 'lucide-react'
+import { Menu, User, UserPlus, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -8,15 +8,16 @@ const navLinks = [
   { label: 'Home', to: '/' },
   { label: 'Courses', to: '/courses' },
   { label: 'Workbook', to: '/workbooks' },
-  { label: 'Appointment', to: '#' },
+  { label: 'Appointment', to: '/appointment' },
   { label: 'About', to: '/about' },
-  { label: 'Blog', to: '#' },
+  { label: 'Blog', to: '/blog' },
   { label: 'Contact Us', to: '/contact' },
 ]
 
 export default function Navbar({ variant = 'overlay' }) {
   const solid = variant === 'solid'
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const closeMenu = () => setMenuOpen(false)
@@ -31,47 +32,54 @@ export default function Navbar({ variant = 'overlay' }) {
     }
   }, [menuOpen])
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <header
       className={`${
-        solid
-          ? 'sticky top-0 z-40 border-b border-gold/20 bg-cream'
-          : 'absolute inset-x-0 bg-cream/90 backdrop-blur-sm'
-      } top-0 z-20 px-4 py-3 sm:px-6 md:px-8 lg:px-10`}
+        solid || scrolled
+          ? 'sticky top-0 z-40 border-b border-gold/20 bg-cream shadow-soft transition-shadow duration-300'
+          : 'absolute inset-x-0 top-0 z-20 bg-cream/90 backdrop-blur-sm'
+      } px-4 py-3 sm:px-6 md:px-8 lg:px-10`}
     >
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-5">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-3 xl:gap-5">
         <a href="#" aria-label="Beyond Script home">
           <img
             src={logo}
             alt="Beyond Script logo"
-            className="h-14 w-auto md:h-16 lg:h-[78px]"
+            className="h-12 w-auto sm:h-14 md:h-16 lg:h-[72px]"
           />
         </a>
 
-        <nav className="ml-auto hidden items-center gap-6 xl:flex">
+        <nav className="ml-auto hidden items-center gap-4 2xl:gap-6 xl:flex">
           {navLinks.map(({ label, to }) => (
             <Link
               key={label}
               to={to}
+              onClick={() => window.scrollTo(0, 0)}
               className={`group relative inline-flex items-center gap-2 py-2 text-[15px] font-semibold text-navy transition-colors hover:text-gold ${
-                label === 'Blog' ? 'text-gold' : ''
+                label === 'Blog' || label === 'Appointment' ? 'text-gold' : ''
               }`}
             >
               <span>{label}</span>
-              {label === 'Courses' && (
-                <ChevronDown size={16} strokeWidth={2.3} />
-              )}
-              {label === 'Blog' && (
-                <span className="absolute -bottom-2 left-0 h-[3px] w-full rounded-full bg-gold" />
-              )}
+
+
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        {/* Divider between nav links and auth buttons */}
+        <span className="hidden h-8 w-[1px] bg-gold/25 xl:block" />
+
+        <div className="hidden items-center gap-2 2xl:gap-3 md:flex">
           <Link
             to="/login"
-            className="inline-flex h-12 items-center gap-3 rounded-md border border-gold bg-cream/75 px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
+            className="inline-flex h-12 items-center gap-2 rounded-md border border-gold bg-cream/75 px-3 2xl:gap-3 2xl:px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
           >
             <User size={21} className="text-gold" strokeWidth={2} />
             Login
@@ -79,10 +87,18 @@ export default function Navbar({ variant = 'overlay' }) {
 
           <Link
             to="/register"
-            className="inline-flex h-12 items-center gap-3 rounded-md bg-gold-gradient px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
+            className="inline-flex h-12 items-center gap-2 rounded-md bg-gold-gradient px-3 2xl:gap-3 2xl:px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
           >
             <UserPlus size={21} strokeWidth={2} />
             Register
+          </Link>
+
+          <Link
+            to="/admin"
+            className="inline-flex h-12 items-center gap-2 rounded-md bg-gold-gradient px-3 2xl:gap-3 2xl:px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
+          >
+            <User size={21} strokeWidth={2} />
+            Admin
           </Link>
 
           <button
@@ -106,7 +122,7 @@ export default function Navbar({ variant = 'overlay' }) {
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          className="grid h-12 w-12 shrink-0 place-items-center rounded-md border border-gold bg-cream/75 text-gold transition-colors hover:bg-white md:hidden"
+          className="grid h-12 w-12 shrink-0 place-items-center rounded-md border border-gold bg-cream/75 text-gold transition-colors hover:bg-white xl:hidden"
         >
           {menuOpen ? <X size={26} strokeWidth={1.8} /> : <Menu size={26} strokeWidth={1.8} />}
         </button>
@@ -120,7 +136,7 @@ export default function Navbar({ variant = 'overlay' }) {
             animate={{ y: 0 }}
             exit={{ y: '-100%' }}
             transition={{ type: 'tween', duration: 0.35, ease: 'easeOut' }}
-            className="fixed inset-0 z-50 flex h-dvh flex-col overflow-hidden bg-cream md:hidden"
+            className="fixed inset-0 z-50 flex h-dvh flex-col overflow-hidden bg-cream xl:hidden"
           >
             <div className="flex items-center justify-between border-b border-gold/15 px-5 py-3">
               <img
@@ -161,38 +177,43 @@ export default function Navbar({ variant = 'overlay' }) {
                 >
                   <Link
                     to={to}
-                    onClick={() => setMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-md px-4 py-2 text-[15px] font-semibold transition-colors ${
-                      label === 'Blog'
+                    onClick={() => { setMenuOpen(false); window.scrollTo(0, 0) }}
+                    className={`flex items-center gap-3 rounded-md px-4 py-3 text-[15px] font-semibold transition-colors ${
+                      label === 'Blog' || label === 'Appointment'
                         ? 'text-gold'
                         : 'text-navy hover:bg-gold/10 hover:text-gold'
                     }`}
                   >
                     <span>{label}</span>
-                    {label === 'Courses' && (
-                      <ChevronDown size={17} strokeWidth={2.3} />
-                    )}
                   </Link>
                 </motion.div>
               ))}
             </nav>
 
-            <div className="mt-auto flex flex-col gap-2.5 border-t border-gold/15 px-5 py-4">
+            <div className="mt-auto -translate-y-5 flex flex-col gap-2.5 border-t border-gold/15 px-5 py-4">
               <Link
                 to="/login"
                 onClick={() => setMenuOpen(false)}
-                className="inline-flex h-11 items-center justify-center gap-3 rounded-md border border-gold bg-cream/75 px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
+                className="inline-flex h-11 items-center justify-center gap-3 rounded-xl border border-gold bg-cream/75 px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
               >
-                <User size={21} className="text-gold" strokeWidth={2} />
+                <User size={20} className="text-gold" strokeWidth={2} />
                 Login
               </Link>
               <Link
                 to="/register"
                 onClick={() => setMenuOpen(false)}
-                className="inline-flex h-11 items-center justify-center gap-3 rounded-md bg-gold-gradient px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
+                className="inline-flex h-11 items-center justify-center gap-3 rounded-xl bg-gold-gradient px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
               >
-                <UserPlus size={21} strokeWidth={2} />
+                <UserPlus size={20} strokeWidth={2} />
                 Register
+              </Link>
+              <Link
+                to="/admin"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex h-11 items-center justify-center gap-3 rounded-xl bg-gold-gradient px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
+              >
+                <User size={20} strokeWidth={2} />
+                Admin
               </Link>
             </div>
           </motion.aside>

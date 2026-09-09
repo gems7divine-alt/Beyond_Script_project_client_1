@@ -366,11 +366,11 @@ export default function LoginPage() {
 
   return (
     <section
-      className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-[#fff9f2] px-5 py-6 md:px-10 lg:px-15"
+      className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-[#fff9f2] px-4 py-6 sm:px-6 md:px-10 lg:px-16"
       style={{
         backgroundImage: `url(${background})`,
-        backgroundSize: '50% auto',
-        backgroundPosition: 'left center',
+        backgroundSize: 'calc(60% - 50px) 150%',
+        backgroundPosition: 'center left',
         backgroundRepeat: 'no-repeat',
       }}
     >
@@ -378,7 +378,7 @@ export default function LoginPage() {
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(270deg,rgba(255,249,242,0.55)_0%,rgba(255,249,242,0.3)_35%,rgba(255,249,242,0.08)_65%,rgba(255,249,242,0)_100%)]" />
 
       {/* Main container */}
-      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-[1440px] items-center justify-end">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-[1440px] items-center justify-center lg:justify-end">
 
         {/* Login Card */}
         <div
@@ -391,7 +391,7 @@ export default function LoginPage() {
             backdrop-blur-md
             sm:p-7
             md:p-8
-            lg:-translate-x-[300px]
+            lg:mr-[12%]
           "
         >
 
@@ -541,7 +541,7 @@ export default function LoginPage() {
                     setShowPassword((prev) => !prev)
                   }
                   className="
-                    shrink-0
+                    flex h-10 w-10 shrink-0 items-center justify-center
                     rounded
                     text-navy/50
                     transition-colors

@@ -31,7 +31,7 @@ export default function WorkbookCard({ workbook }) {
 
         <button
           aria-label="Add to wishlist"
-          className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/80 text-navy/40 backdrop-blur-sm transition-colors hover:bg-white hover:text-red-500"
+          className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-white/80 text-navy/40 backdrop-blur-sm transition-colors hover:bg-white hover:text-red-500"
         >
           <Heart size={16} strokeWidth={2} />
         </button>

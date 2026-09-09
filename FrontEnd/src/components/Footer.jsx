@@ -170,7 +170,7 @@ export default function Footer() {
 
       {/* Section 2: Footer Main */}
       <div className="mx-auto max-w-[1440px] px-4 py-16 sm:px-6 md:px-8 lg:px-10">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 lg:gap-8">
           {/* Column 1: Logo & Info */}
           <motion.div
             variants={fadeUp}
@@ -261,8 +261,8 @@ export default function Footer() {
               <Feather size={12} className="text-gold" />
             </div>
             <ul className="space-y-2.5">
-              {socialLinks.map(({ icon: Icon, label }) => (
-                <li key={label}>
+              {socialLinks.map(({ icon: Icon, label }, index) => (
+                <li key={`${label}-${index}`}>
                   <span className="flex items-center gap-2.5 text-sm text-navy/60 transition-colors hover:text-gold">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold/10 text-gold">
                       <Icon />

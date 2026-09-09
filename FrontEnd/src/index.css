@@ -20,9 +20,75 @@
 html {
   background: #fff9f2;
   overflow-x: clip;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   overflow-x: clip;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid rgb(183 117 10 / 0.6);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 639px) {
+  #root > div > section {
+    padding-inline: 1rem;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  .rounded-2xl.p-6,
+  .rounded-2xl.p-8 {
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1441px) {
+  #root > div > section > .max-w-\[1440px\],
+  #root > div > footer > .max-w-\[1440px\] {
+    max-width: 1600px;
+  }
 }

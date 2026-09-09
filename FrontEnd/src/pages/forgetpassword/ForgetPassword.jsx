@@ -965,18 +965,18 @@ export default function ForgetPassword() {
 
   return (
     <section
-      className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-[#fff9f2] px-5 py-6 md:px-10 lg:px-15"
+      className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-[#fff9f2] px-4 py-6 sm:px-6 md:px-10 lg:px-16"
       style={{
         backgroundImage: `url(${background})`,
-        backgroundSize: '50% auto',
-        backgroundPosition: 'left center',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center left',
         backgroundRepeat: 'no-repeat',
       }}
     >
       {/* Background overlay */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(270deg,rgba(255,249,242,0.55)_0%,rgba(255,249,242,0.3)_35%,rgba(255,249,242,0.08)_65%,rgba(255,249,242,0)_100%)]" />
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-[1440px] items-center justify-end">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-[1440px] items-center justify-center lg:justify-end">
         <div
           className="
             w-full max-w-[460px]
@@ -987,7 +987,7 @@ export default function ForgetPassword() {
             backdrop-blur-md
             sm:p-7
             md:p-8
-            lg:-translate-x-[300px]
+            lg:mr-[12%]
           "
         >
           {/* LOGO */}
@@ -1432,7 +1432,7 @@ export default function ForgetPassword() {
                         )
                       }
                       className="
-                        shrink-0
+                        flex h-10 w-10 shrink-0 items-center justify-center
                         rounded
                         text-navy/50
                         transition-colors
@@ -1528,7 +1528,7 @@ export default function ForgetPassword() {
                         )
                       }
                       className="
-                        shrink-0
+                        flex h-10 w-10 shrink-0 items-center justify-center
                         rounded
                         text-navy/50
                         transition-colors

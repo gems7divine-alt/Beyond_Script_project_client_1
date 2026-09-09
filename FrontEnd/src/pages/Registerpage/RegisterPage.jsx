@@ -483,11 +483,11 @@ export default function RegisterPage() {
 
   return (
     <section
-      className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-[#fff9f2] px-5 py-6 md:px-10 lg:px-15"
+      className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-[#fff9f2] px-4 py-6 sm:px-6 md:px-10 lg:px-16"
       style={{
         backgroundImage: `url(${background})`,
-        backgroundSize: '50% auto',
-        backgroundPosition: 'left center',
+        backgroundSize: 'calc(60% - 50px) 150%',
+        backgroundPosition: 'center left',
         backgroundRepeat: 'no-repeat',
       }}
     >
@@ -512,7 +512,8 @@ export default function RegisterPage() {
           w-full
           max-w-[1440px]
           items-center
-          justify-end
+          justify-center
+          lg:justify-end
         "
       >
         {/* Register Card */}
@@ -527,7 +528,7 @@ export default function RegisterPage() {
             backdrop-blur-md
             sm:p-7
             md:p-8
-            lg:-translate-x-[300px]
+            lg:mr-[12%]
           "
         >
           {/* Logo */}
@@ -745,7 +746,7 @@ export default function RegisterPage() {
                     setShowPassword((prev) => !prev)
                   }
                   className="
-                    shrink-0
+                    flex h-10 w-10 shrink-0 items-center justify-center
                     rounded
                     text-navy/50
                     transition-colors

@@ -22,7 +22,7 @@ export default function CourseSidebar({
             <li key={id}>
               <button
                 onClick={() => onCategoryChange(id)}
-                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm font-medium transition-colors ${
                   activeCategory === id
                     ? 'bg-gold/10 text-gold'
                     : 'text-navy/70 hover:bg-gold/5 hover:text-navy'
@@ -65,7 +65,7 @@ export default function CourseSidebar({
         <p className="mb-4 text-sm leading-relaxed text-navy/60">
           Join thousands transforming their lives every day.
         </p>
-        <button className="w-full rounded-xl bg-gold-gradient px-5 py-2.5 text-sm font-bold text-white shadow-gold transition-transform hover:-translate-y-0.5">
+        <button className="w-full rounded-xl bg-gold-gradient px-5 py-3 text-sm font-bold text-white shadow-gold transition-transform hover:-translate-y-0.5">
           Start Your Journey
         </button>
       </div>

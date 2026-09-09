@@ -69,8 +69,8 @@ export default function Courses() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="relative w-64 lg:w-72">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <div className="relative w-full sm:w-64 lg:w-72">
               <Search
                 size={18}
                 className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-navy/40"
@@ -87,7 +87,7 @@ export default function Courses() {
             <div className="relative">
               <button
                 onClick={() => setSortOpen((prev) => !prev)}
-                className="flex h-12 items-center gap-2 whitespace-nowrap rounded-xl border border-gold/15 bg-white px-4 text-sm font-medium text-navy shadow-soft transition-colors hover:border-gold/30"
+                className="flex h-12 w-full items-center justify-between gap-2 whitespace-nowrap rounded-xl border border-gold/15 bg-white px-4 text-sm font-medium text-navy shadow-soft transition-colors hover:border-gold/30 sm:w-auto"
               >
                 Sort by: {currentSortLabel}
                 <ChevronDown

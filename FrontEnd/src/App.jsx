@@ -141,7 +141,8 @@
 //   )
 // }
 
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
@@ -157,10 +158,30 @@ import Courses from './pages/courses/Courses.jsx'
 import Workbooks from './pages/workbooks/Workbooks.jsx'
 import About from './pages/about/About.jsx'
 import Contact from './pages/contact/Contact.jsx'
+import Blog from './pages/blog/Blog.jsx'
+import Appointment from './pages/appointment/Appointment.jsx'
+import BlogDetail from './pages/blog/BlogDetail.jsx'
+import Admin from './pages/admin/Admin.jsx'
+import { AppointmentProvider } from './data/appointmentsStore'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.history.scrollRestoration = 'manual'
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0)
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+    })
+  }, [pathname])
+  return null
+}
 
 export default function App() {
   return (
+    <AppointmentProvider>
     <div className="min-h-screen bg-cream font-sans text-navy">
+      <ScrollToTop />
       <Routes>
 
         {/* ==================== HOME ==================== */}
@@ -269,6 +290,52 @@ export default function App() {
           }
         />
 
+        {/* ==================== BLOG ==================== */}
+
+        <Route
+          path="/blog"
+          element={
+            <>
+              <Navbar variant="solid" />
+              <Blog />
+              <Footer />
+            </>
+          }
+        />
+
+        {/* ==================== BLOG DETAIL ==================== */}
+
+        <Route
+          path="/blog/:id"
+          element={
+            <>
+              <Navbar variant="solid" />
+              <BlogDetail />
+              <Footer />
+            </>
+          }
+        />
+
+        {/* ==================== APPOINTMENT ==================== */}
+
+        <Route
+          path="/appointment"
+          element={
+            <>
+              <Navbar variant="solid" />
+              <Appointment />
+              <Footer />
+            </>
+          }
+        />
+
+        {/* ==================== ADMIN ==================== */}
+
+        <Route
+          path="/admin"
+          element={<Admin />}
+        />
+
         {/* ==================== UNKNOWN URL ==================== */}
 
         <Route
@@ -278,5 +345,6 @@ export default function App() {
 
       </Routes>
     </div>
+    </AppointmentProvider>
   )
 }
