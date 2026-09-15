@@ -1,8 +1,9 @@
 import logo from '../assets/images/logo.png'
-import { Menu, User, UserPlus, X } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { Menu, User, UserPlus, X, ChevronDown, BookOpen, CalendarDays, LogOut } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useAuth } from '../data/authStore'
 
 const navLinks = [
   { label: 'Home', to: '/' },
@@ -18,6 +19,29 @@ export default function Navbar({ variant = 'overlay' }) {
   const solid = variant === 'solid'
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const profileRef = useRef(null)
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const displayName = user?.name || user?.fullName || user?.username || 'User Name'
+
+  const handleLogout = () => {
+    logout()
+    setProfileOpen(false)
+    setMenuOpen(false)
+    navigate('/')
+  }
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
 
   useEffect(() => {
     const closeMenu = () => setMenuOpen(false)
@@ -77,21 +101,25 @@ export default function Navbar({ variant = 'overlay' }) {
         <span className="hidden h-8 w-[1px] bg-gold/25 xl:block" />
 
         <div className="hidden items-center gap-2 2xl:gap-3 md:flex">
-          <Link
-            to="/login"
-            className="inline-flex h-12 items-center gap-2 rounded-md border border-gold bg-cream/75 px-3 2xl:gap-3 2xl:px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
-          >
-            <User size={21} className="text-gold" strokeWidth={2} />
-            Login
-          </Link>
+          {!user && (
+            <>
+              <Link
+                to="/login"
+                className="inline-flex h-12 items-center gap-2 rounded-md border border-gold bg-cream/75 px-3 2xl:gap-3 2xl:px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
+              >
+                <User size={21} className="text-gold" strokeWidth={2} />
+                Login
+              </Link>
 
-          <Link
-            to="/register"
-            className="inline-flex h-12 items-center gap-2 rounded-md bg-gold-gradient px-3 2xl:gap-3 2xl:px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
-          >
-            <UserPlus size={21} strokeWidth={2} />
-            Register
-          </Link>
+              <Link
+                to="/register"
+                className="inline-flex h-12 items-center gap-2 rounded-md bg-gold-gradient px-3 2xl:gap-3 2xl:px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
+              >
+                <UserPlus size={21} strokeWidth={2} />
+                Register
+              </Link>
+            </>
+          )}
 
           <Link
             to="/admin"
@@ -101,22 +129,99 @@ export default function Navbar({ variant = 'overlay' }) {
             Admin
           </Link>
 
-          <button
-            aria-label="User profile"
-            className="inline-flex h-12 items-center gap-2 rounded-full border border-gold bg-cream/70 px-2 pr-4 text-gold transition-colors hover:bg-white md:gap-3"
-          >
-            <span className="grid h-9 w-9 place-items-center rounded-full border border-gold">
-              <User size={20} strokeWidth={1.8} />
-            </span>
-            <span className="hidden text-left md:block">
-              <span className="block text-[13px] font-medium leading-tight text-navy/60">
-                Welcome back
+          <div ref={profileRef} className="relative">
+            <button
+              onClick={() => setProfileOpen((prev) => !prev)}
+              aria-label="User profile"
+              className="inline-flex h-12 items-center gap-2 rounded-full border border-gold bg-cream/70 px-2 pr-4 text-gold transition-colors hover:bg-white md:gap-3"
+            >
+              <span className="grid h-9 w-9 place-items-center rounded-full border border-gold">
+                <User size={20} strokeWidth={1.8} />
               </span>
-              <span className="block max-w-28 truncate text-[15px] font-bold leading-tight text-navy">
-                User Name
+              <span className="hidden text-left md:block">
+                <span className="block text-[13px] font-medium leading-tight text-navy/60">
+                  {user ? 'Welcome back' : 'Guest'}
+                </span>
+                <span className="block max-w-28 truncate text-[15px] font-bold leading-tight text-navy">
+                  {displayName}
+                </span>
               </span>
-            </span>
-          </button>
+              <ChevronDown
+                size={14}
+                className={`hidden transition-transform md:block ${profileOpen ? 'rotate-180' : ''}`}
+                strokeWidth={2}
+              />
+            </button>
+
+            <AnimatePresence>
+              {profileOpen && (
+                <motion.div
+                  key="profile-dropdown"
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-gold/20 bg-white shadow-panel"
+                >
+                  {user ? (
+                    <>
+                      <Link
+                        to="/profile"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-3 text-[13.5px] font-semibold text-navy transition-colors hover:bg-[#F8EBCF]/30 hover:text-gold"
+                      >
+                        <User size={16} className="text-gold" strokeWidth={1.8} />
+                        Profile
+                      </Link>
+                      <Link
+                        to="/courses"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-3 text-[13.5px] font-semibold text-navy transition-colors hover:bg-[#F8EBCF]/30 hover:text-gold"
+                      >
+                        <BookOpen size={16} className="text-gold" strokeWidth={1.8} />
+                        My Courses
+                      </Link>
+                      <Link
+                        to="/appointment"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-3 text-[13.5px] font-semibold text-navy transition-colors hover:bg-[#F8EBCF]/30 hover:text-gold"
+                      >
+                        <CalendarDays size={16} className="text-gold" strokeWidth={1.8} />
+                        My Appointments
+                      </Link>
+                      <div className="mx-3 my-1 h-px bg-[#E9D8B8]" />
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2.5 px-4 py-3 text-[13.5px] font-semibold text-red-600 transition-colors hover:bg-red-50"
+                      >
+                        <LogOut size={16} strokeWidth={1.8} />
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-3 text-[13.5px] font-semibold text-navy transition-colors hover:bg-[#F8EBCF]/30 hover:text-gold"
+                      >
+                        <User size={16} className="text-gold" strokeWidth={1.8} />
+                        Login
+                      </Link>
+                      <Link
+                        to="/register"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-3 text-[13.5px] font-semibold text-navy transition-colors hover:bg-[#F8EBCF]/30 hover:text-gold"
+                      >
+                        <UserPlus size={16} className="text-gold" strokeWidth={1.8} />
+                        Register
+                      </Link>
+                    </>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         <button
@@ -159,10 +264,10 @@ export default function Navbar({ variant = 'overlay' }) {
               </span>
               <span className="min-w-0">
                 <span className="block text-[13px] font-medium leading-tight text-navy/60">
-                  Welcome back
+                  {user ? 'Welcome back' : 'Guest'}
                 </span>
                 <span className="block max-w-44 truncate text-[16px] font-bold leading-tight text-navy">
-                  User Name
+                  {displayName}
                 </span>
               </span>
             </div>
@@ -191,22 +296,34 @@ export default function Navbar({ variant = 'overlay' }) {
             </nav>
 
             <div className="mt-auto -translate-y-5 flex flex-col gap-2.5 border-t border-gold/15 px-5 py-4">
-              <Link
-                to="/login"
-                onClick={() => setMenuOpen(false)}
-                className="inline-flex h-11 items-center justify-center gap-3 rounded-xl border border-gold bg-cream/75 px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
-              >
-                <User size={20} className="text-gold" strokeWidth={2} />
-                Login
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setMenuOpen(false)}
-                className="inline-flex h-11 items-center justify-center gap-3 rounded-xl bg-gold-gradient px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
-              >
-                <UserPlus size={20} strokeWidth={2} />
-                Register
-              </Link>
+              {!user ? (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="inline-flex h-11 items-center justify-center gap-3 rounded-xl border border-gold bg-cream/75 px-4 text-[15px] font-semibold text-navy shadow-sm transition-colors hover:bg-white"
+                  >
+                    <User size={20} className="text-gold" strokeWidth={2} />
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMenuOpen(false)}
+                    className="inline-flex h-11 items-center justify-center gap-3 rounded-xl bg-gold-gradient px-4 text-[15px] font-semibold text-white shadow-gold transition-transform hover:-translate-y-0.5"
+                  >
+                    <UserPlus size={20} strokeWidth={2} />
+                    Register
+                  </Link>
+                </>
+              ) : (
+                <button
+                  onClick={handleLogout}
+                  className="inline-flex h-11 items-center justify-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 text-[15px] font-semibold text-red-600 transition-colors hover:bg-red-100"
+                >
+                  <LogOut size={20} strokeWidth={2} />
+                  Logout
+                </button>
+              )}
               <Link
                 to="/admin"
                 onClick={() => setMenuOpen(false)}

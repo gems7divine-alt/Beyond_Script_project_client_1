@@ -162,7 +162,9 @@ import Blog from './pages/blog/Blog.jsx'
 import Appointment from './pages/appointment/Appointment.jsx'
 import BlogDetail from './pages/blog/BlogDetail.jsx'
 import Admin from './pages/admin/Admin.jsx'
+import UserProfile from './pages/profile_page/UserProfile.jsx'
 import { AppointmentProvider } from './data/appointmentsStore'
+import { AuthProvider } from './data/authStore'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -179,6 +181,7 @@ function ScrollToTop() {
 
 export default function App() {
   return (
+    <AuthProvider>
     <AppointmentProvider>
     <div className="min-h-screen bg-cream font-sans text-navy">
       <ScrollToTop />
@@ -329,6 +332,13 @@ export default function App() {
           }
         />
 
+        {/* ==================== PROFILE ==================== */}
+
+        <Route
+          path="/profile"
+          element={<UserProfile />}
+        />
+
         {/* ==================== ADMIN ==================== */}
 
         <Route
@@ -346,5 +356,6 @@ export default function App() {
       </Routes>
     </div>
     </AppointmentProvider>
+    </AuthProvider>
   )
 }

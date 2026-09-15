@@ -308,6 +308,7 @@ import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { loginUser } from '../../services/api'
+import { useAuth } from '../../data/authStore'
 
 import background from '../../assets/images/login-background.jpg'
 import logo from '../../assets/images/logo.png'
@@ -322,6 +323,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -337,17 +339,7 @@ export default function LoginPage() {
 
       console.log('Login successful:', data)
 
-      // Save JWT token
-      localStorage.setItem(
-        'accessToken',
-        data.token
-      )
-
-      // Save user information
-      localStorage.setItem(
-        'user',
-        JSON.stringify(data.user)
-      )
+      login(data.user, data.token)
 
       // Navigate to home page
       navigate('/')
