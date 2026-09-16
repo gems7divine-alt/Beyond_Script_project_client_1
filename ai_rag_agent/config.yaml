@@ -1,0 +1,27 @@
+app:
+  name: ai-rag-agent
+
+llm:
+  provider: google
+  model: gemini-2.5-flash
+
+embedding:
+  provider: google
+  model: gemini-embedding-2-preview
+
+chunking:
+  chunk_size: 1000
+  chunk_overlap: 200
+
+vectordb:
+  provider: chroma
+  collection_name: rag_documents
+  persist_directory: ./chroma_db
+
+retrieval:
+  top_k: 3
+  search_type: similarity
+
+ingestion:
+  data_path: ./data
+  file_type: pdf

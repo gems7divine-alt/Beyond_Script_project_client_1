@@ -163,6 +163,7 @@ import Appointment from './pages/appointment/Appointment.jsx'
 import BlogDetail from './pages/blog/BlogDetail.jsx'
 import Admin from './pages/admin/Admin.jsx'
 import UserProfile from './pages/profile_page/UserProfile.jsx'
+import AiAgent from './pages/ai_agent/ai_agent.jsx'
 import { AppointmentProvider } from './data/appointmentsStore'
 import { AuthProvider } from './data/authStore'
 
@@ -197,6 +198,7 @@ export default function App() {
               <Hero />
               <AboutPreview />
               <ContactPreview />
+              <AiAgent />
               <Footer />
             </>
           }
